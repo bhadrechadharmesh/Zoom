@@ -24,6 +24,8 @@ const login = async(req,res)=>{
             await user.save();
 
             return res.status(httpStatus.OK).json({token:token});
+        } else{
+            return res.status(httpStatus.UNAUTHORIZED).json({msg:"invalid credentials"});
         }
 
     } catch(e){
