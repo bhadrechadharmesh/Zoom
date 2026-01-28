@@ -17,7 +17,9 @@ const login = async(req,res)=>{
             return res.status(httpStatus.NOT_FOUND).json({msg:"user not found"});
         }
 
-        if(bcrypt.compare(password,user.password)){
+        
+        let check = await bcrypt.compare(password,user.password);
+        if(check){
             let token = crypto.randomBytes(20).toString("hex");
 
             user.token = token ;
