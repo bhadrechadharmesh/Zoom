@@ -15,22 +15,15 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AuthContext } from '../contexts/AuthContext';
 import { Snackbar } from '@mui/material';
 
-
-
-// TODO remove, this demo shouldn't need to reset the theme.
-
 const defaultTheme = createTheme();
 
 export default function Authentication() {
-
-    
 
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [name, setName] = React.useState("");
     const [error, setError] = React.useState();
     const [message, setMessage] = React.useState();
-
 
     const [formState, setFormState] = React.useState(0);
 

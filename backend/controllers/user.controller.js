@@ -39,6 +39,10 @@ const login = async(req,res)=>{
 const register = async (req, res)=>{
     const {name,username,password} = req.body;
 
+    if(!username || !password || !name) {
+        return res.status(400).json({msg:"provide complete details"})
+    }
+
     try{
         const existingUser = await User.findOne({username});
         if(existingUser) {
