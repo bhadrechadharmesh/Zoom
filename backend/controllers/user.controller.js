@@ -1,4 +1,5 @@
 import { User } from "../models/user.model.js";
+import { Meeting } from "../models/meeting.model.js";
 import httpStatus from "http-status";
 import bcrypt, {hash} from "bcrypt";
 import crypto from "crypto";
@@ -99,4 +100,4 @@ const addToHistory = async (req, res) => {
 
 
 
-export {login,register}
+export {login,register,getUserHistory,addToHistory}
