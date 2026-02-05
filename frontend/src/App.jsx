@@ -6,6 +6,7 @@ import { AuthProvider } from './contexts/AuthContext.jsx'
 import VideoMeet from './pages/VideoMeet.jsx'
 import HomeComponent from './pages/home';
 import History from './pages/history';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 import './App.css'
  
@@ -14,6 +15,7 @@ const App = () => {
    <>
       <Router>
         <AuthProvider>
+          <ThemeProvider>
           <Routes>
            
             <Route path='/' element={<Landing/>}/>
@@ -22,6 +24,7 @@ const App = () => {
             <Route path='/history' element={<History />} />
             <Route path='/:url' element={<VideoMeet/>} />
           </Routes>
+          </ThemeProvider>
         </AuthProvider>
       </Router>
    </>
