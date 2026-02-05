@@ -301,4 +301,4 @@ function HomeComponent() {
     );
 }
 
-export default withAuth(HomeComponent);
+export default HomeComponent

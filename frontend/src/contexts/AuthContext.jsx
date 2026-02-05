@@ -1,56 +1,66 @@
 import axios from "axios";
-import { createContext, useContext, useState } from "react";
-import {useNavigate} from 'react-router-dom';
+import { createContext, useContext, useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import httpStatus from "http-status";
 import server from "../environment";
 
 export const AuthContext = createContext({});
 
 const client = axios.create({
-    baseURL:`${server}/api/v1/users`
+    baseURL: `${server}/api/v1/users`
 })
 
-export const AuthProvider = ({children})=>{
+export const AuthProvider = ({ children }) => {
 
-    const authContext = useContext(AuthContext);
+    const router = useNavigate();
 
-    const [userData , setUserData] = useState(authContext);
+    // 1. Initialize state by checking localStorage directly
+    const [userData, setUserData] = useState(() => {
+        const token = localStorage.getItem("token");
+        return token ? { token } : null; 
+    });
 
-    const handleRegister = async(name,username,password)=>{
-        try{
-            let request = await client.post("/register",{
-                name:name,
-                username:username,
-                password:password,
-            })
+    // 2. Handle Registration
+    const handleRegister = async (name, username, password) => {
+        try {
+            let request = await client.post("/register", {
+                name: name,
+                username: username,
+                password: password,
+            });
 
-            if(request.status == httpStatus.CREATED) {
+            if (request.status === httpStatus.CREATED) {
                 return request.data.message;
             }
-        } catch(err){
+        } catch (err) {
             throw err;
-
         }
     }
 
-    const handleLogin = async (username,password) =>{
-        try{
-            let request = await client.post("/login",{
-                username:username,
-                password:password
-            })
-            
-            if(request.status == httpStatus.OK){
-                console.log(request.data);
-                localStorage.setItem("token",request.data.token);
+    // 3. Handle Login
+    const handleLogin = async (username, password) => {
+        try {
+            let request = await client.post("/login", {
+                username: username,
+                password: password
+            });
+
+            if (request.status === httpStatus.OK) {
+                localStorage.setItem("token", request.data.token);
+                setUserData({ token: request.data.token }); // Update State
                 router("/home");
-            }else{
-                
             }
-        } catch(err){  
+        } catch (err) {
             throw err;
         }
     }
+    
+    // 4. Handle Logout
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        setUserData(null);
+        router("/auth");
+    };
 
     const getHistoryOfUser = async () => {
         try {
@@ -60,8 +70,7 @@ export const AuthProvider = ({children})=>{
                 }
             });
             return request.data
-        } catch
-         (err) {
+        } catch (err) {
             throw err;
         }
     }
@@ -78,15 +87,18 @@ export const AuthProvider = ({children})=>{
         }
     }
 
-
-    const router = useNavigate();
-
-    const data ={
-        userData,setUserData,handleRegister,handleLogin,getHistoryOfUser,addToUserHistory
-    }
+    const data = {
+        userData, 
+        setUserData, 
+        handleRegister, 
+        handleLogin, 
+        handleLogout, // Added logout function
+        getHistoryOfUser, 
+        addToUserHistory
+    };
 
     return (
-        <AuthContext.Provider value={data} >
+        <AuthContext.Provider value={data}>
             {children}
         </AuthContext.Provider>
     )
