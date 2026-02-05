@@ -125,14 +125,14 @@ function HomeComponent() {
     const handleJoinVideoCall = async () => {
         if (meetingCode.trim()) {
             await addToUserHistory(meetingCode);
-            navigate(`/${meetingCode}`);
+            navigate(`/meet/${meetingCode}`);
         }
     };
 
     const handleCreateMeeting = async () => {
         const code = Math.random().toString(36).substring(2, 8);
         await addToUserHistory(code);
-        navigate(`/${code}`);
+        navigate(`/meet/${code}`);
     }
 
     // Format Date/Time
