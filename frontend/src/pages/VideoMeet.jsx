@@ -17,6 +17,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import VideoComponent from '../components/VideoComponent';
 import ChatPanel from '../components/ChatPanel';
 import server from '../environment';
+import { useNavigate } from 'react-router-dom';
 
 const server_url = server;
 
@@ -298,10 +299,10 @@ export default function VideoMeetComponent() {
         localStreamRef.current = userMedia;
         setScreen(false);
     };
-
+    const route  =useNavigate();
     const handleEndCall = () => {
         if(localStreamRef.current) localStreamRef.current.getTracks().forEach(track => track.stop());
-        window.location.href = "/home";
+        route("/home");
     };
 
     const copyUrl = () => {
